@@ -8,22 +8,24 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache https://www.springframework.org/schema/cache/spring-cache.xsd http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
+
+
     <bean id="poolingDataSource" class="bitronix.tm.resource.jdbc.PoolingDataSource"
           init-method="init" destroy-method="close">
-        <property name="className" value="com.mysql.jdbc.Driver"/>
-        <property name="uniqueName" value="database"/>
-        <property name="minPoolSize" value="1"/>
-        <property name="maxPoolSize" value="5"/>
-        <property name="allowLocalTransactions" value="true"/>
+        <property name="className" value="${db.driverName}"/>
+        <property name="uniqueName" value="${uniqueNameBtn}"/>
+        <property name="minPoolSize" value="${minPoolSize}"/>
+        <property name="maxPoolSize" value="${maxPoolSize}"/>
+        <property name="allowLocalTransactions" value="${allowLocalTransactions}"/>
 
-        <property name="twoPcOrderingPosition" value="1"/>
-        <property name="applyTransactionTimeout" value="true"/>
-        <property name="isolationLevel" value="READ_COMMITED"/>
+        <property name="twoPcOrderingPosition" value="${twoPcOrderingPosition}"/>
+        <property name="applyTransactionTimeout" value="${applyTransactionTimeout}"/>
+        <property name="isolationLevel" value="${isolationLevel}"/>
         <property name="driverProperties">
             <props>
-                <prop key="url">jdbc:mysql://localhost:3306/xml_test</prop>
-                <prop key="user">root</prop>
-                <prop key="password">1234</prop>
+                <prop key="url">${db.url}</prop>
+                <prop key="user">${db.login}</prop>
+                <prop key="password">${db.password}</prop>
             </props>
         </property>
 
@@ -31,10 +33,10 @@
     </bean>
 
     <bean id="jmsXaConnectionFactory" class="org.apache.activemq.ActiveMQXAConnectionFactory">
-        <property name="brokerURL" value="tcp;//localhost:61616"/>
+        <property name="brokerURL" value="${brokerURL}"/>
         <property name="redeliveryPolicy">
             <bean class="org.apache.activemq.RedeliveryPolicy">
-                <property name="maximumRedeliveries" value="1"/>
+                <property name="maximumRedeliveries" value="${maximumRedeliveries}"/>
             </bean>
         </property>
     </bean>
@@ -54,7 +56,7 @@
 
     <bean id="transactionalPolicy" class="org.apache.camel.spring.spi.SpringTransactionPolicy">
         <property name="transactionManager" ref="jtaManager"/>
-        <property name="propagationBehaviorName" value="PROPAGATION_REQUIRED"/>
+        <property name="propagationBehaviorName" value="${propagationBehaviorName}"/>
     </bean>
 
     <bean id="activemqXA" class="org.apache.activemq.camel.component.ActiveMQComponent">
@@ -64,14 +66,14 @@
     <bean id="activemqXAConnectionFactory" class="bitronix.tm.resource.jms.PoolingConnectionFactory"
           depends-on="jtaManager">
         <property name="className" value="org.apache.activemq.ActiveMQXAConnectionFactory"/>
-        <property name="uniqueName" value="activemqUnique"/>
-        <property name="MaxPoolSize" value="2"/>
-        <property name="allowLocalTransactions" value="true"/>
+        <property name="uniqueName" value="${ActiveUniqueName}"/>
+        <property name="MaxPoolSize" value="${ActiveMaxPoolSize}"/>
+        <property name="allowLocalTransactions" value="${allowLocalTransactions}"/>
         <property name="driverProperties">
             <props>
-                <prop key="brokerURL">tcp://localhost:61616</prop>
-                <prop key="redeliveryPolicy.redeliveryDelay">1000</prop>
-                <prop key="redeliveryPolicy.maximumRedeliveries">-1</prop>
+                <prop key="brokerURL">${brokerURL}</prop>
+                <prop key="redeliveryPolicy.redeliveryDelay">${redeliveryPolicy.redeliveryDelay}</prop>
+                <prop key="redeliveryPolicy.maximumRedeliveries">${redeliveryPolicy.maximumRedeliveries}</prop>
             </props>
         </property>
     </bean>
@@ -79,33 +81,9 @@
     <bean id="jmsConfigurationXa" class="org.apache.camel.component.jms.JmsConfiguration">
         <property name="connectionFactory" ref="activemqXAConnectionFactory"/>
         <property name="transactionManager" ref="jtaManager"/>
-        <property name="transacted" value="true"/>
+        <property name="transacted" value="${transacted}"/>
     </bean>
 
-    <spring:camelContext>
-        <spring:route errorHandlerRef="errorHandler">
-            <spring:from uri="file"/>
-            <spring:process ref="processor"/>
-            <spring:choice>
-                <spring:when>
-                    <spring:simple>${file:ext}=='txt'</spring:simple>
-                    <spring:convertBodyTo type="String"/>
-                    <spring:to uri="direct:db"/>
-                </spring:when>
-                <spring:when>
-                    <spring:simple>${file:ext}=='xml'</spring:simple>
-                    <spring:convertBodyTo type="String"/>
-                    <spring:to uri="jms:queue:xml_queue"/>
-                </spring:when>
-            </spring:choice>
-        </spring:route>
-        <spring:route>
-            <spring:from uri="direct:db"/>
-            <spring:process ref="txtFileProcessor"/>
-            <spring:to uri="jms:queue:txt_queue"/>
-        </spring:route>
-    </spring:camelContext>
-    <spring:errorHandler id="errorHandler" type="DeadLetterChannel" deadLetterUri="jms:queue:invalid_queue"/>
 
     <bean id="txtFileProcessor" class="TxtFileProcessor" depends-on="poolingDataSource">
         <property name="poolingDataSource" ref="poolingDataSource"/>

@@ -2,10 +2,37 @@
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:tx="http://www.springframework.org/schema/cache" xmlns:spring="http://camel.apache.org/schema/spring"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
         http://www.springframework.org/schema/beans/spring-beans.xsd
         http://www.springframework.org/schema/context
-        http://www.springframework.org/schema/context/spring-context.xsd">
+        http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/cache https://www.springframework.org/schema/cache/spring-cache.xsd http://camel.apache.org/schema/spring http://camel.apache.org/schema/spring/camel-spring.xsd">
 
     <import resource="beans.xml"/>
+    <context:property-placeholder location="classpath:application.properties"/>
+
+    <spring:camelContext>
+        <spring:route errorHandlerRef="errorHandler">
+            <spring:from uri="file"/>
+            <spring:process ref="processor"/>
+            <spring:choice>
+                <spring:when>
+                    <spring:simple>${file:ext}=='txt'</spring:simple>
+                    <spring:convertBodyTo type="String"/>
+                    <spring:to uri="direct:db"/>
+                </spring:when>
+                <spring:when>
+                    <spring:simple>${file:ext}=='xml'</spring:simple>
+                    <spring:convertBodyTo type="String"/>
+                    <spring:to uri="jms:queue:xml_queue"/>
+                </spring:when>
+            </spring:choice>
+        </spring:route>
+        <spring:route>
+            <spring:from uri="direct:db"/>
+            <spring:process ref="txtFileProcessor"/>
+            <spring:to uri="jms:queue:txt_queue"/>
+        </spring:route>
+    </spring:camelContext>
+    <spring:errorHandler id="errorHandler" type="DeadLetterChannel" deadLetterUri="jms:queue:invalid_queue"/>
 </beans>

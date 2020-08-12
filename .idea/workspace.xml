@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="d301c1bc-6c31-4ee0-a3db-6d75b9f18e55" name="Default Changelist" comment="" />
+    <list default="true" id="d301c1bc-6c31-4ee0-a3db-6d75b9f18e55" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/config/beans.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/config/beans.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/config/camelContext.xml" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/config/camelContext.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -13,6 +17,9 @@
         <option value="Class" />
       </list>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="MavenImportPreferences">
     <option name="importingSettings">
@@ -50,6 +57,9 @@
       <workItem from="1597134273820" duration="842000" />
       <workItem from="1597141388867" duration="112000" />
       <workItem from="1597148901232" duration="2155000" />
+      <workItem from="1597171229732" duration="616000" />
+      <workItem from="1597172303440" duration="34000" />
+      <workItem from="1597219934828" duration="1315000" />
     </task>
     <servers />
   </component>
@@ -57,6 +67,10 @@
     <option name="version" value="1" />
   </component>
   <component name="WindowStateProjectService">
+    <state x="1585" y="383" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog" timestamp="1597220438603">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1585" y="383" key="#com.intellij.codeInsight.i18n.I18nizeQuickFixDialog/0.0.2560.1040@0.0.2560.1040" timestamp="1597220438603" />
     <state x="1693" y="323" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1597152404412">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
@@ -65,10 +79,14 @@
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
     <state x="1710" y="223" key="#com.intellij.ide.util.MemberChooser/0.0.2560.1040@0.0.2560.1040" timestamp="1597047130655" />
-    <state x="1685" y="271" key="FileChooserDialogImpl" timestamp="1597141499821">
+    <state x="1685" y="271" key="FileChooserDialogImpl" timestamp="1597172323301">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
-    <state x="1685" y="271" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1597141499821" />
+    <state x="1685" y="271" key="FileChooserDialogImpl/0.0.2560.1040@0.0.2560.1040" timestamp="1597172323301" />
+    <state x="1304" y="218" key="new project wizard" timestamp="1597172335289">
+      <screen x="0" y="0" width="2560" height="1040" />
+    </state>
+    <state x="1304" y="218" key="new project wizard/0.0.2560.1040@0.0.2560.1040" timestamp="1597172335289" />
     <state x="1581" y="212" key="spring file set editor" timestamp="1597065833727">
       <screen x="0" y="0" width="2560" height="1040" />
     </state>
